@@ -1,0 +1,77 @@
+# You can get all User-Agent from: http://www.webapps-online.com/online-tools/user-agent-strings
+# If you want to add UA of some version or change them,
+# you just need to edit this file and generate code with `go run gen/gen-db.go` again.
+browsers:
+  Firefox:
+    engine:
+      name: Gecko
+    version:
+      major: [35, 56]
+      minor: [35, 56]
+      patch: [0, 3]
+  Chrome:
+    engine:
+      name: AppleWebKit
+      version:
+        major: [534, 603]
+        minor: [35, 56]
+    version:
+      major: [39, 64]
+      minor: 0
+      patch: [0, 3000]
+  Safari:
+    engine:
+      name: WebKit
+      version:
+        major: [534, 603]
+        minor: [0, 21]
+        patch: [0, 10]
+    version:
+      major: [5, 11]
+      minor: [0, 2]
+      patch: [0, 10]
+platforms:
+  Desktop:
+    Linux:
+      version:
+        major: [3, 5]
+        minor: [0, 3]
+        patch: [0, 3]
+    MacOS:
+      version:
+        major: [8, 10]
+        minor: [0, 3]
+        patch: [0, 3]
+    Windows:
+      version:
+        major: [7, 10]
+        minor: [0, 3]
+        patch: [0, 3]
+  Phone:
+    iOS:
+      version:
+        major: [6, 11]
+        minor: [0, 3]
+        patch: [0, 3]
+    Android:
+      version:
+        major: [4, 8]
+        minor: [0, 4]
+        patch: [0, 4]
+bots: # Auto upper the first letter
+  google: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
+  bing: Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)
+  yahoo: Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)
+  mj12: Mozilla/5.0 (compatible; MJ12bot/v1.4.5; http://www.majestic12.co.uk/bot.php)
+  simplePie: SimplePie/1.3.1 (Feed Parser; http://simplepie.org; Allow like Gecko)
+  blex: Mozilla/5.0 (compatible; BLEXBot/1.0; +http://webmeup-crawler.com/)
+  yandex: Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)
+  scoutJet: Mozilla/5.0 (compatible; ScoutJet; +http://www.scoutjet.com/)
+  duck: DuckDuckBot/1.1; (+http://duckduckgo.com/duckduckbot.html)
+  baidu: Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)
+  sogou: Sogou web spider/4.0(+http://www.sogou.com/docs/help/webmasters.htm#07)
+  sogouOrin: Sogou Orion spider/3.0( http://www.sogou.com/docs/help/webmasters.htm#07)
+  exa: Mozilla/5.0 (compatible; Konqueror/3.5; Linux) KHTML/3.5.5 (like Gecko) (Exabot-Thumbnails)
+  facebook: facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)
+  alexa: ia_archiver (+http://www.alexa.com/site/help/webmasters; crawler@alexa.com)
+  msn: msnbot/2.0b (+http://search.msn.com/msnbot.htm)

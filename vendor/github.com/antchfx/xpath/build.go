@@ -77,7 +77,18 @@ func (b *builder) processAxisNode(root *axisNode) (query, error) {
 				} else {
 					qyGrandInput = &contextQuery{}
 				}
-				qyOutput = &descendantQuery{Input: qyGrandInput, Predicate: predicate, Self: true}
+				// fix #20: https://github.com/antchfx/htmlquery/issues/20
+				filter := func(n NodeNavigator) bool {
+					v := predicate(n)
+					switch root.Prop {
+					case "text":
+						v = v && n.NodeType() == TextNode
+					case "comment":
+						v = v && n.NodeType() == CommentNode
+					}
+					return v
+				}
+				qyOutput = &descendantQuery{Input: qyGrandInput, Predicate: filter, Self: true}
 				return qyOutput, nil
 			}
 		}
@@ -182,8 +193,23 @@ func (b *builder) processFunctionNode(root *functionNode) (query, error) {
 		if err != nil {
 			return nil, err
 		}
-
 		qyOutput = &functionQuery{Input: b.firstInput, Func: containsFunc(arg1, arg2)}
+	case "matches":
+		//matches(string , pattern)
+		if len(root.Args) != 2 {
+			return nil, errors.New("xpath: matches function must have two parameters")
+		}
+		var (
+			arg1, arg2 query
+			err        error
+		)
+		if arg1, err = b.processNode(root.Args[0]); err != nil {
+			return nil, err
+		}
+		if arg2, err = b.processNode(root.Args[1]); err != nil {
+			return nil, err
+		}
+		qyOutput = &functionQuery{Input: b.firstInput, Func: matchesFunc(arg1, arg2)}
 	case "substring":
 		//substring( string , start [, length] )
 		if len(root.Args) < 2 {
@@ -398,6 +424,15 @@ func (b *builder) processFunctionNode(root *functionNode) (query, error) {
 			args = append(args, q)
 		}
 		qyOutput = &functionQuery{Input: b.firstInput, Func: concatFunc(args...)}
+	case "reverse":
+		if len(root.Args) == 0 {
+			return nil, fmt.Errorf("xpath: reverse(node-sets) function must with have parameters node-sets")
+		}
+		argQuery, err := b.processNode(root.Args[0])
+		if err != nil {
+			return nil, err
+		}
+		qyOutput = &transformFunctionQuery{Input: argQuery, Func: reverseFunc}
 	default:
 		return nil, fmt.Errorf("not yet support this function %s()", root.FuncName)
 	}
@@ -415,13 +450,15 @@ func (b *builder) processOperatorNode(root *operatorNode) (query, error) {
 	}
 	var qyOutput query
 	switch root.Op {
-	case "+", "-", "div", "mod": // Numeric operator
+	case "+", "-", "*", "div", "mod": // Numeric operator
 		var exprFunc func(interface{}, interface{}) interface{}
 		switch root.Op {
 		case "+":
 			exprFunc = plusFunc
 		case "-":
 			exprFunc = minusFunc
+		case "*":
+			exprFunc = mulFunc
 		case "div":
 			exprFunc = divFunc
 		case "mod":

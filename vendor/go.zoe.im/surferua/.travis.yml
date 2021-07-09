@@ -1,0 +1,26 @@
+language: go
+
+go:
+  - 1.11.x
+
+# this ensures PRs based on a local branch are not built twice
+# the downside is that a PR targeting a different branch is not built
+# but as a workaround you can add the branch to this list
+branches:
+  only:
+    - master
+env:
+  - GO111MODULE=on
+
+matrix:
+  fast_finish: true
+
+install:
+  - make getdeps
+
+script:
+  - make test
+  - make coverage
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)

@@ -138,6 +138,7 @@ Supported Features
 `lang()`| ✗ |
 `last()`| ✓ |
 `local-name()`| ✓ |
+`matches()`| ✓ |
 `name()`| ✓ |
 `namespace-uri()`| ✓ |
 `normalize-space()`| ✓ |
@@ -145,6 +146,7 @@ Supported Features
 `number()`| ✓ |
 `position()`| ✓ |
 `replace()`| ✓ |
+`reverse()`| ✓ |
 `round()`| ✓ |
 `starts-with()`| ✓ |
 `string()`| ✓ |
